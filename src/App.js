@@ -1,10 +1,15 @@
 
 import React, { Component } from "react";
+import axios from 'axios';
 import "./App.css";
+
 
 const emailRegex = RegExp(
   /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 );
+
+
+
 
 function password_validate(password) {
   var re = {
@@ -45,6 +50,7 @@ class App extends Component {
       password: null,
       confirmpassword : null,
       formErrors: {
+        id: "",
         firstName: "",
         lastName: "",
         email: "",
@@ -58,13 +64,15 @@ class App extends Component {
     e.preventDefault();
 
     if (formValid(this.state)) {
-      console.log(`
-        --SUBMITTING--
-        First Name: ${this.state.firstName}
-        Last Name: ${this.state.lastName}
-        Email: ${this.state.email}
-        Password: ${this.state.password}
-      `);
+      const user = {
+        "ID" : this.state.id,
+        "FirstName" : this.state.firstName,
+        "LastName" : this.state.lastName,
+        "Email": this.state.email,
+        "Password": this.state.password
+      };
+      axios.post('https://0vdl2otb65.execute-api.us-east-1.amazonaws.com/dev/createac',{user});
+      console.info('submited');
     } else {
       console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
     }
@@ -103,6 +111,7 @@ class App extends Component {
     }
 
     this.setState({ formErrors, [name]: value }, () => console.log(this.state));
+    
   };
 
   render() {
@@ -113,6 +122,16 @@ class App extends Component {
         <div className="form-wrapper">
           <h1>Create Account</h1>
           <form onSubmit={this.handleSubmit} noValidate>
+          <div className="id">
+              <label htmlFor="id">ID</label>
+              <input
+                placeholder="id"
+                type="text"
+                name="id"
+                noValidate
+                onChange={this.handleChange}
+              />
+            </div>
             <div className="firstName">
               <label htmlFor="firstName">First Name</label>
               <input

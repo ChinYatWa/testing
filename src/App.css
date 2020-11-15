@@ -5,11 +5,11 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #8fdbb7;
+  background-image: url("./home.jpg");
 }
 
 .form-wrapper {
-  width: 400px;
+  width: 500px;
   display: flex;
   flex-direction: column;
   padding: 20px 40px;
@@ -63,38 +63,40 @@ input.error {
   display: relative;
 }
 
-.firstName {
+
+.FirstName {
   margin-right: 1%;
 }
 
-.lastName {
+.LastName {
   margin-left: 1%;
 }
 
-.firstName,
-.lastName,
-.email,
-.password,
-.confirmpassword 
+.ID,
+.FirstName,
+.LastName,
+.Email,
+.Password,
+.ConfirmPassword 
 {
   display: flex;
   flex-direction: column;
   margin-bottom: 15px;
 }
 
-.firstName,
-.lastName {
+
+.FirstName,
+.LastName {
   width: 49%;
 }
 
-.email,
-.password {
+.Email,
+.ID,
+.Password,
+.ConfirmPassword {
   width: 100%;
 }
 
-.confirmpassword {
-  width: 100%;
-}
 
 .createAccount {
   width: 100%;

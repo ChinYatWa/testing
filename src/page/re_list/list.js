@@ -3,7 +3,6 @@ import axios from 'axios';
 import "./list.css";
 import { Link ,  Redirect } from "react-router-dom";
 
-import TimePicker from 'react-time-picker';
 
 
 
@@ -24,6 +23,7 @@ class Signup extends Component {
     super(props);
     
     this.state = {
+      ListID : null,
       From : null,
       To: null,
       ID: null,
@@ -31,6 +31,10 @@ class Signup extends Component {
       Item: null,
       Tips : null,
       Time : '',
+      total : null,
+      setkey :null,
+      Data: null,
+      done : false,
       formErrors: {
         From : "",
         To: "",
@@ -49,28 +53,52 @@ class Signup extends Component {
     e.preventDefault();
 
     const user = localStorage.getItem("user");
+
+    const tmp = this.state.total + ""
+
+
+    console.log(tmp)
     
     var data = {
+        ListID : tmp,
         From_To : this.state.From+"_"+this.state.To,
         Shop : this.state.Shop,
         Item : this.state.Item,
         Time : this.state.Time,
         ID : user,
-        Tips : this.state.Tips
+        Tips : this.state.Tips,
+        Helper : "",
+        total : ""
     }
-    if (formValid(this.state)) {
-        axios.post('https://82icieeeoa.execute-api.us-east-1.amazonaws.com/po/postlist/',data);
-        console.info('submited');
-        this.setState({done : true});
-      } else {
-        console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
-      }
-  };
 
+      
+    if (formValid(this.state)) {
+      axios.post('https://82icieeeoa.execute-api.us-east-1.amazonaws.com/po/postlist/',data);
+      console.info('submited');
+      console.log(data)
+      this.setState({done : true});
+    } else {
+      console.error("FORM INVALID - DISPLAY ERROR MESSAGE");
+    }
+      
+      
+  };
+  
   handleChange = e => {
     e.preventDefault();
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
+    
+
+    axios.get('https://82icieeeoa.execute-api.us-east-1.amazonaws.com/ge/getlist?ListID=-1')
+    .then(response=> {
+      console.log(response);
+      this.setState({total : response.data.Item.total});
+    })
+    .catch(error =>{
+      console.log(error)
+      this.setState({error : true})
+    })
 
     switch (name) {
         case "From":
@@ -93,29 +121,45 @@ class Signup extends Component {
 
   render() {
     const { formErrors } = this.state;
+    if(this.state.done === true){
+      const tmp = this.state.total + 1
+      localStorage.setItem("total",tmp)
+      return <Redirect to = {'/update_total'}></Redirect>
+    }
     return (
       <div className="wrapper">
         <div className="form-wrapper">
           <h2>Post A Request</h2>
           <form onSubmit={this.handleSubmit} noValidate>
           <div className="ID">
-              <label htmlFor="From">From</label>
-              <select>
+              <label htmlFor="From">From : {" "}
+              <select 
+              name = "From"
+              value = {this.state.From} 
+              noValidate
+              onChange={this.handleChange}>
                   <option value = "ST">Sha Tin</option>
                   <option value = "KB">Kowloon Bay</option>
                   <option value = "SSP">Sham Shui Po</option>
                   <option value = "TW">Tai Wai</option>=
               </select>
+              </label>
             </div>
 
             <div className="ID">
-              <label htmlFor="To">To</label>
-              <select>
+              <label htmlFor="To">To : {" "}
+              <select 
+              name = "To"
+              value = {this.state.To} 
+              noValidate
+              onChange={this.handleChange
+              }>
                   <option value = "ST">Sha Tin</option>
                   <option value = "KB">Kowloon Bay</option>
                   <option value = "SSP">Sham Shui Po</option>
                   <option value = "TW">Tai Wai</option>=
               </select>
+              </label>
             </div>
 
             <div className="LastName">

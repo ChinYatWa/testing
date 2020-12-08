@@ -8,6 +8,11 @@ import logout from "./page/logout/logout"
 import list from "./page/re_list/list"
 import showlist from "./page/List/showlist"
 import show from "./page/List/show"
+import update_total from "./page/re_list/update_total"
+import update from "./page/List/Update"
+import profile from "./page/prof/profile"
+import mypo from "./page/prof/mypo"
+import mymis from "./page/prof/mymis"
 
 function App(){
   return(
@@ -21,6 +26,11 @@ function App(){
         <Route exact path = "/list" component = {list} />
         <Route exact path = "/showlist" component = {showlist} />
         <Route exact path = "/show" component = {show} />
+        <Route exact path = "/update_total" component = {update_total} />
+        <Route exact path = "/update" component = {update} />
+        <Route exact path = "/profile" component = {profile} />
+        <Route exact path = "/mypo" component = {mypo} />
+        <Route exact path = "/mymis" component = {mymis} />
         <Redirect to = ""/>
       </Switch>
     </Router>

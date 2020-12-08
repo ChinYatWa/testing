@@ -55,6 +55,7 @@ class Signup extends Component {
       Password: null,
       ConfirmPassword : null,
       done,
+      check : null,
       formErrors: {
         id: "",
         firstName: "",
@@ -85,7 +86,23 @@ class Signup extends Component {
     const { name, value } = e.target;
     let formErrors = { ...this.state.formErrors };
 
+    axios.get('https://0vdl2otb65.execute-api.us-east-1.amazonaws.com/dex/getuserinfo?ID='+this.state.ID)
+    .then(response=> {
+      console.log(response);
+      this.setState({check : response.data.Item.ID});
+    })
+    .catch(error =>{
+      console.log(error)
+      this.setState({error : true})
+    })
+
+
     switch (name) {
+      case "ID":
+        formErrors.id = 
+          value === this.state.check ? "This Username is already exsit" : "";
+        break;
+
       case "FirstName":
         formErrors.firstName =
           value.length < 1 ? "minimum 1 characaters required" : "";
@@ -136,12 +153,16 @@ class Signup extends Component {
           <div className="ID">
               <label htmlFor="ID">ID</label>
               <input
+              className={formErrors.id.length > 0 ? "error" : null}
                 placeholder="ID"
                 type="text"
                 name="ID"
                 noValidate
                 onChange={this.handleChange}
               />
+              {formErrors.id.length > 0 && (
+                <span className="errorMessage">{formErrors.id}</span>
+              )}
             </div>
             <div className="FirstName">
               <label htmlFor="FirstName">First Name</label>
@@ -214,7 +235,7 @@ class Signup extends Component {
               )}
             </div>
             <div className="createAccount">
-              <button type="submit">Create Account</button>
+              <button type="submit" onChange={this.handleChange} >Create Account</button>
               <small>
               <Link to = {'/login'}>
                 Already Have an Account?

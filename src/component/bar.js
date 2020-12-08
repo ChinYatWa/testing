@@ -20,7 +20,8 @@ class Bar extends Component {
                     </a>
         
                 <div class="topnav-right">
-                    <a href="#">Profile</a>
+                    <a href="#">Refresh</a>
+                    <a href="./profile">Profile</a>
                     <a className = "bt1" href="./logout">Logout</a>
                     <a >  </a>
                 </div>
